@@ -12,6 +12,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
 import { AppShell, Text, Header } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
@@ -20,15 +22,17 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={qP}>
       <MantineProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Navbar />}>
-              <Route index element={<BlogDisplay />} />
-              <Route path="create" element={<BlogCreate />} />
-              <Route path=":id" element={<Blog />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <NotificationsProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navbar />}>
+                <Route index element={<BlogDisplay />} />
+                <Route path="create" element={<BlogCreate />} />
+                <Route path=":id" element={<Blog />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </NotificationsProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </MantineProvider>
     </QueryClientProvider>
