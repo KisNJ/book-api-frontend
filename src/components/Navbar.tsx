@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import {
   AppShell,
@@ -10,9 +10,12 @@ import {
   TextInput,
   Alert,
 } from "@mantine/core";
+import { Link, useLocation } from "react-router-dom";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
-
+import { useUserStore } from "../stores/userStore";
+import { useGetUser } from "../api/getUser";
+import { signUp, logIn, logOut } from "../api/booksApi";
 const NavbarP = () => {
   const [show, setShow] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -21,6 +24,8 @@ const NavbarP = () => {
     password: "",
     confirmPassword: "",
   });
+  const username = useUserStore((state) => state.username);
+  const changeUser = useUserStore((state) => state.changeUser);
   const [formDataLogin, setFormDataLogin] = useState({
     username: "",
     password: "",
@@ -34,7 +39,6 @@ const NavbarP = () => {
         text: "Password and confirm password are not the same!",
       }));
     } else {
-      setShow(false);
       showNotification({
         id: "load-data",
         loading: true,
@@ -43,23 +47,22 @@ const NavbarP = () => {
         autoClose: false,
         disallowClose: true,
       });
-      const rawResponse = await fetch("http://localhost:3100/signup", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const rawResponse = await signUp(formData);
       const response = await rawResponse.json();
       if (rawResponse.status < 400) {
+        setShow(false);
         updateNotification({
           id: "load-data",
-          color: "blue",
+          color: "teal",
           title: "Signed up succesfully",
           message: "Log in to create blog or to comment!",
           icon: <IconCheck size={16} />,
           autoClose: 2000,
+        });
+        setFormData({
+          username: "",
+          password: "",
+          confirmPassword: "",
         });
       } else {
         updateNotification({
@@ -75,8 +78,6 @@ const NavbarP = () => {
         type: "",
         text: "",
       });
-      // const content = await rawResponse.json();
-      // console.log(content);
     }
   }
   async function handleSubmitLogin(e: React.SyntheticEvent) {
@@ -89,15 +90,33 @@ const NavbarP = () => {
       autoClose: false,
       disallowClose: true,
     });
-    const rawResponse = await fetch("http://localhost:3100/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formDataLogin),
-    });
-    const response = await rawResponse.json();
-    console.log(response);
+    const rawResponse = await logIn(formDataLogin);
+    if (rawResponse.status === 200) {
+      const resp = await rawResponse.json();
+      changeUser(resp.username, resp._id);
+      setShowLogin(false);
+      updateNotification({
+        id: "load-data",
+        color: "teal",
+        title: "Logged in succesfully",
+        message: "Now you can comment or create blogs.",
+        icon: <IconCheck size={16} />,
+        autoClose: 2000,
+      });
+      setFormDataLogin({
+        username: "",
+        password: "",
+      });
+    } else {
+      updateNotification({
+        id: "load-data",
+        color: "red",
+        title: "Failed to log in",
+        message: "Wrong username or password",
+        icon: <IconX size={16} />,
+        autoClose: 2000,
+      });
+    }
   }
   function dataChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormData((old) => ({
@@ -111,11 +130,48 @@ const NavbarP = () => {
       [e.target.id]: e.target.value,
     }));
   }
+  async function handleLogout() {
+    const resp = await logOut();
+    window.location.reload();
+  }
+  useGetUser();
+  useEffect(() => {}, []);
+
+  let location = useLocation();
+  console.log(location);
   return (
     <>
       <Group>
         <Text>Navbar</Text>
-        <Button onClick={() => setShow((o) => !o)}>Sign Up</Button>
+        <Text>{username}</Text>
+        {location.pathname === "/" ? (
+          <Button disabled component={Link} to="/">
+            Home page
+          </Button>
+        ) : (
+          <Button component={Link} to="/">
+            Home page
+          </Button>
+        )}
+        {!username ? (
+          <>
+            <Button onClick={() => setShow((o) => !o)}>Sign Up</Button>
+            <Button onClick={() => setShowLogin((o) => !o)}>Log In</Button>
+          </>
+        ) : (
+          <>
+            {location.pathname === "/create" ? (
+              <Button disabled component={Link} to="/create">
+                Create a blog post
+              </Button>
+            ) : (
+              <Button component={Link} to="/create">
+                Create a blog post
+              </Button>
+            )}
+            <Button onClick={() => handleLogout()}>Log out</Button>
+          </>
+        )}
         <Modal opened={show} onClose={() => setShow(false)} title="Sign up!">
           <form onSubmit={handleSubmit}>
             <TextInput
@@ -170,7 +226,7 @@ const NavbarP = () => {
             </Alert>
           )}
         </Modal>
-        <Button onClick={() => setShowLogin((o) => !o)}>Log In</Button>
+
         <Modal
           opened={showLogin}
           onClose={() => setShowLogin(false)}
