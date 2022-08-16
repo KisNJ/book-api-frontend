@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useGetUser } from "../api/getUser";
 import {
   Text,
   Container,
@@ -15,7 +14,6 @@ import { useUserStore } from "../stores/userStore";
 import { IconX, IconCheck } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 const BlogCreate = () => {
-  useGetUser();
   const naigate = useNavigate();
   const _id = useUserStore((state) => state._id);
   const [createPostData, setCreatePostData] = useState({

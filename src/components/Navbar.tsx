@@ -139,7 +139,6 @@ const NavbarP = () => {
   useGetUser();
 
   let location = useLocation();
-  console.log(location);
   return (
     <>
       <Group>
@@ -269,7 +268,7 @@ const Navbar = () => {
   return (
     <AppShell
       header={
-        <Header p="md" height="50">
+        <Header p="md" height="60" fixed={false}>
           <NavbarP />
         </Header>
       }

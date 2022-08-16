@@ -106,3 +106,21 @@ export const getBlogById = async (id: string) => {
   });
   return response;
 };
+
+export const addComment = async (blog_id: string, content: string) => {
+  console.log(JSON.stringify(content));
+  const response = await fetch(
+    `http://localhost:3100/api/blogs/${blog_id}/comment`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      credentials: "include",
+      body: JSON.stringify({ content }),
+    },
+  );
+  return response;
+};
