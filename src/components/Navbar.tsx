@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../App.css";
 import { Outlet } from "react-router-dom";
 import {
   AppShell,
@@ -16,6 +17,7 @@ import { IconCheck, IconX } from "@tabler/icons";
 import { useUserStore } from "../stores/userStore";
 import { useGetUser } from "../api/getUser";
 import { signUp, logIn, logOut } from "../api/booksApi";
+
 const NavbarP = () => {
   const [show, setShow] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -135,7 +137,6 @@ const NavbarP = () => {
     window.location.reload();
   }
   useGetUser();
-  useEffect(() => {}, []);
 
   let location = useLocation();
   console.log(location);
