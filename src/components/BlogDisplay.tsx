@@ -21,6 +21,7 @@ const BlogDisplay = () => {
     };
     run();
   }, []);
+  console.log(displayData);
   if (isError)
     return (
       <Text align="center" size="xl" weight={700} mt="md">

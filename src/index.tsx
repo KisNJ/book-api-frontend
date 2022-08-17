@@ -19,24 +19,24 @@ const root = ReactDOM.createRoot(
 );
 const qP = new QueryClient();
 root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={qP}>
-      <MantineProvider>
-        <NotificationsProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Navbar />}>
-                <Route index element={<BlogDisplay />} />
-                <Route path="create" element={<BlogCreate />} />
-                <Route path=":id" element={<Blog />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </NotificationsProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </MantineProvider>
-    </QueryClientProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <QueryClientProvider client={qP}>
+    <MantineProvider>
+      <NotificationsProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navbar />}>
+              <Route index element={<BlogDisplay />} />
+              <Route path="create" element={<BlogCreate />} />
+              <Route path=":id" element={<Blog />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </NotificationsProvider>
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+    </MantineProvider>
+  </QueryClientProvider>,
+  // </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function

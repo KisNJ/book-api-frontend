@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Textarea, TextInput } from "@mantine/core";
 import { useUserStore } from "../stores/userStore";
-import { addComment } from "../api/booksApi";
+import { addComment, IComment } from "../api/booksApi";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
 interface props {
@@ -9,6 +9,10 @@ interface props {
 }
 
 const AddComment = ({ blog_id }: props) => {
+  const _id = useUserStore((state) => state._id);
+  const username = useUserStore((state) => state.username);
+  const [content, setContent] = useState("");
+
   async function handleClick() {
     showNotification({
       id: "comment",
@@ -21,8 +25,6 @@ const AddComment = ({ blog_id }: props) => {
     const resp = await addComment(blog_id, content);
     console.log(resp);
     if (resp.status === 200) {
-      //ok
-      //add comment to local
       setContent("");
       updateNotification({
         id: "comment",
@@ -32,6 +34,7 @@ const AddComment = ({ blog_id }: props) => {
         color: "teal",
         autoClose: 2000,
       });
+      window.location.reload();
     } else {
       updateNotification({
         id: "comment",
@@ -43,8 +46,7 @@ const AddComment = ({ blog_id }: props) => {
       });
     }
   }
-  const username = useUserStore((state) => state.username);
-  const [content, setContent] = useState("");
+
   return (
     <div>
       <TextInput disabled value={`${username}`} />

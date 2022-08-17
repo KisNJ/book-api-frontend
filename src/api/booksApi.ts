@@ -82,7 +82,7 @@ export interface IComment {
   author: IAuthor;
   content: string;
   created_at: string;
-  blog_id: IBlog;
+  blog_id: string;
   _id: string;
 }
 export interface IBlog {
@@ -120,6 +120,19 @@ export const addComment = async (blog_id: string, content: string) => {
       },
       credentials: "include",
       body: JSON.stringify({ content }),
+    },
+  );
+  return response;
+};
+export const deleteComment = async (blog_id: string, comment_id: string) => {
+  const response = await fetch(
+    `http://localhost:3100/api/blogs/${blog_id}/comment/${comment_id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+      },
+      credentials: "include",
     },
   );
   return response;
