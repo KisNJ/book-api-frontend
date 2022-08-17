@@ -41,7 +41,14 @@ const Blog = () => {
       sessionStorage.setItem("scrollPosition", JSON.stringify(window.scrollY));
     }
   }
-
+  async function refecth() {
+    const run = async () => {
+      const resp = await getBlogById(id as string);
+      const data = await resp.json();
+      setBlogData(data as IBlog);
+    };
+    run();
+  }
   useEffect(() => {
     const run = async () => {
       const resp = await getBlogById(id as string);
@@ -69,8 +76,8 @@ const Blog = () => {
         <Title order={2}>
           <Text variant="gradient">Comments</Text>
         </Title>
-        {username && <AddComment blog_id={id as string} />}
-        <CommentSection comments={blogData.comments} />
+        {username && <AddComment blog_id={id as string} refetch={refecth} />}
+        <CommentSection comments={blogData.comments} refetch={refecth} />
       </div>
     </Container>
   );

@@ -4,11 +4,13 @@ import { useUserStore } from "../stores/userStore";
 import { addComment, IComment } from "../api/booksApi";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
+import { resolveProjectReferencePath } from "typescript";
 interface props {
   blog_id: string;
+  refetch: () => Promise<void>;
 }
 
-const AddComment = ({ blog_id }: props) => {
+const AddComment = ({ blog_id, refetch }: props) => {
   const _id = useUserStore((state) => state._id);
   const username = useUserStore((state) => state.username);
   const [content, setContent] = useState("");
@@ -34,7 +36,7 @@ const AddComment = ({ blog_id }: props) => {
         color: "teal",
         autoClose: 2000,
       });
-      window.location.reload();
+      refetch();
     } else {
       updateNotification({
         id: "comment",

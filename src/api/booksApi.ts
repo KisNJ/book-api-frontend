@@ -137,3 +137,22 @@ export const deleteComment = async (blog_id: string, comment_id: string) => {
   );
   return response;
 };
+export const updateComment = async (
+  blog_id: string,
+  comment_id: string,
+  content: string,
+) => {
+  const response = await fetch(
+    `http://localhost:3100/api/blogs/${blog_id}/comment/${comment_id}`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ content }),
+    },
+  );
+  return response;
+};

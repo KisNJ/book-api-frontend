@@ -5,9 +5,10 @@ import Comment from "./Comment";
 import { useUserStore } from "../stores/userStore";
 interface props {
   comments: IComment[];
+  refetch: () => Promise<void>;
 }
 
-const CommentSection = ({ comments }: props) => {
+const CommentSection = ({ comments, refetch }: props) => {
   const username = useUserStore((state) => state.username);
   if (comments === undefined) return <div>Loading</div>;
   console.log(comments);
@@ -22,6 +23,7 @@ const CommentSection = ({ comments }: props) => {
           author={comment.author}
           content={comment.content}
           created_at={comment.created_at}
+          refecth={refetch}
         />
       ))}
     </Stack>
