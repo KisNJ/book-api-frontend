@@ -13,6 +13,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
 import { AppShell, Text, Header } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
+import BlogOwn from "./components/BlogOwn";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -28,6 +29,7 @@ root.render(
             <Route path="/" element={<Navbar />}>
               <Route index element={<BlogDisplay />} />
               <Route path="create" element={<BlogCreate />} />
+              <Route path="own" element={<BlogOwn />} />
               <Route path=":id" element={<Blog />} />
             </Route>
           </Routes>

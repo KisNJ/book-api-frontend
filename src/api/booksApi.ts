@@ -156,3 +156,41 @@ export const updateComment = async (
   );
   return response;
 };
+export const deleteBlog = async (blog_id: string) => {
+  const response = await fetch(`http://localhost:3100/api/blogs/${blog_id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  return response;
+};
+export interface IUpdateBlog {
+  title: string;
+  content: string;
+  public: boolean;
+}
+export const updateBlog = async (blog_id: string, content: IUpdateBlog) => {
+  const response = await fetch(`http://localhost:3100/api/blogs/${blog_id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ content }),
+  });
+  return response;
+};
+export const getEveryOwnPost = async () => {
+  const response = await fetch("http://localhost:3100/api/blogs/own", {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+  return response;
+};

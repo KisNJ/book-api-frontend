@@ -10,6 +10,7 @@ import {
   Modal,
   TextInput,
   Alert,
+  Title,
 } from "@mantine/core";
 import { Link, useLocation } from "react-router-dom";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -141,125 +142,146 @@ const NavbarP = () => {
   let location = useLocation();
   return (
     <>
-      <Group>
-        <Text>Navbar</Text>
-        <Text>{username}</Text>
-        {location.pathname === "/" ? (
-          <Button disabled component={Link} to="/">
-            Home page
-          </Button>
-        ) : (
-          <Button component={Link} to="/">
-            Home page
-          </Button>
-        )}
-        {!username ? (
-          <>
-            <Button onClick={() => setShow((o) => !o)}>Sign Up</Button>
-            <Button onClick={() => setShowLogin((o) => !o)}>Log In</Button>
-          </>
-        ) : (
-          <>
-            {location.pathname === "/create" ? (
-              <Button disabled component={Link} to="/create">
-                Create a blog post
-              </Button>
-            ) : (
-              <Button component={Link} to="/create">
-                Create a blog post
-              </Button>
-            )}
-            <Button onClick={() => handleLogout()}>Log out</Button>
-          </>
-        )}
-        <Modal opened={show} onClose={() => setShow(false)} title="Sign up!">
-          <form onSubmit={handleSubmit}>
-            <TextInput
-              placeholder="username"
-              label="Username"
-              required
-              minLength={1}
-              id="username"
-              onChange={dataChange}
-              value={formData.username}
-            />
-            <TextInput
-              placeholder="passowrd"
-              label="Password"
-              error={
-                error.type === "password matching"
-                  ? "passwords are not matching"
-                  : ""
-              }
-              required
-              id="password"
-              onChange={dataChange}
-              value={formData.password}
-            />
-            <TextInput
-              placeholder="confirm password"
-              label="Confirm Password"
-              error={
-                error.type === "password matching"
-                  ? "passwords are not matching"
-                  : ""
-              }
-              required
-              id="confirmPassword"
-              onChange={dataChange}
-              value={formData.confirmPassword}
-            />
-            <Button mt="md" type="submit">
-              Sign Up
+      <Group position="apart">
+        <Title order={1}>
+          <Text
+            variant="gradient"
+            gradient={
+              username
+                ? { from: "orange", to: "red" }
+                : { from: "blue", to: "indigo" }
+            }
+          >
+            {username || "Blogs app"}
+          </Text>
+        </Title>
+        <div style={{ display: "flex", gap: "10px" }}>
+          {location.pathname === "/" ? (
+            <Button disabled component={Link} to="/">
+              Home page
             </Button>
-          </form>
-          {error.type && (
-            <Alert
-              mt="md"
-              withCloseButton
-              closeButtonLabel="Close alert"
-              title="Error!"
-              color="red"
-              onClose={() => setError({ type: "", text: "" })}
-            >
-              {error.text}
-            </Alert>
+          ) : (
+            <Button component={Link} to="/">
+              Home page
+            </Button>
           )}
-        </Modal>
+          {!username ? (
+            <>
+              <Button onClick={() => setShow((o) => !o)}>Sign Up</Button>
+              <Button onClick={() => setShowLogin((o) => !o)}>Log In</Button>
+            </>
+          ) : (
+            <>
+              {location.pathname === "/create" ? (
+                <Button disabled component={Link} to="/create">
+                  Create a blog post
+                </Button>
+              ) : (
+                <Button component={Link} to="/create">
+                  Create a blog post
+                </Button>
+              )}
+              {location.pathname === "/own" ? (
+                <Button disabled component={Link} to="/own">
+                  Your blogs
+                </Button>
+              ) : (
+                <Button component={Link} to="/own">
+                  Your blogs
+                </Button>
+              )}
+              <Button onClick={() => handleLogout()}>Log out</Button>
+            </>
+          )}
+          <Modal opened={show} onClose={() => setShow(false)} title="Sign up!">
+            <form onSubmit={handleSubmit}>
+              <TextInput
+                placeholder="username"
+                label="Username"
+                required
+                minLength={1}
+                id="username"
+                onChange={dataChange}
+                value={formData.username}
+              />
+              <TextInput
+                placeholder="passowrd"
+                label="Password"
+                error={
+                  error.type === "password matching"
+                    ? "passwords are not matching"
+                    : ""
+                }
+                required
+                id="password"
+                onChange={dataChange}
+                value={formData.password}
+              />
+              <TextInput
+                placeholder="confirm password"
+                label="Confirm Password"
+                error={
+                  error.type === "password matching"
+                    ? "passwords are not matching"
+                    : ""
+                }
+                required
+                id="confirmPassword"
+                onChange={dataChange}
+                value={formData.confirmPassword}
+              />
+              <Button mt="md" type="submit">
+                Sign Up
+              </Button>
+            </form>
+            {error.type && (
+              <Alert
+                mt="md"
+                withCloseButton
+                closeButtonLabel="Close alert"
+                title="Error!"
+                color="red"
+                onClose={() => setError({ type: "", text: "" })}
+              >
+                {error.text}
+              </Alert>
+            )}
+          </Modal>
 
-        <Modal
-          opened={showLogin}
-          onClose={() => setShowLogin(false)}
-          title="Log In!"
-        >
-          <form onSubmit={handleSubmitLogin}>
-            <TextInput
-              placeholder="username"
-              label="Username"
-              required
-              minLength={1}
-              id="username"
-              onChange={dataChangeLogin}
-              value={formDataLogin.username}
-            />
-            <TextInput
-              placeholder="passowrd"
-              label="Password"
-              error={
-                error.type === "password matching"
-                  ? "passwords are not matching"
-                  : ""
-              }
-              required
-              id="password"
-              onChange={dataChangeLogin}
-              value={formDataLogin.password}
-            />
-            <Button mt="md" type="submit">
-              Log in
-            </Button>
-          </form>
-        </Modal>
+          <Modal
+            opened={showLogin}
+            onClose={() => setShowLogin(false)}
+            title="Log In!"
+          >
+            <form onSubmit={handleSubmitLogin}>
+              <TextInput
+                placeholder="username"
+                label="Username"
+                required
+                minLength={1}
+                id="username"
+                onChange={dataChangeLogin}
+                value={formDataLogin.username}
+              />
+              <TextInput
+                placeholder="passowrd"
+                label="Password"
+                error={
+                  error.type === "password matching"
+                    ? "passwords are not matching"
+                    : ""
+                }
+                required
+                id="password"
+                onChange={dataChangeLogin}
+                value={formDataLogin.password}
+              />
+              <Button mt="md" type="submit">
+                Log in
+              </Button>
+            </form>
+          </Modal>
+        </div>
       </Group>
     </>
   );

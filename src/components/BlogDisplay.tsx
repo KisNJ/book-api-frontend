@@ -12,6 +12,7 @@ const BlogDisplay = () => {
       setIsLoading(true);
       const resp = await getEveryPublicPost();
       if (resp.status === 200) {
+        setIsError(false);
         const display = await resp.json();
         setDisplayData(display);
       } else {
@@ -21,7 +22,6 @@ const BlogDisplay = () => {
     };
     run();
   }, []);
-  console.log(displayData);
   if (isError)
     return (
       <Text align="center" size="xl" weight={700} mt="md">

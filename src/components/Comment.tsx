@@ -100,7 +100,7 @@ const Comment = ({
     if (resp.status === 200) {
       updateNotification({
         id: "updating",
-        title: "Deleted comment",
+        title: "Updated comment",
         message: "Comment updated succesfully",
         autoClose: true,
         color: "teal",
@@ -141,7 +141,6 @@ const Comment = ({
   return (
     <Card>
       <LoadingOverlay visible={showUpdateOverLay} overlayBlur={2} />
-      {showUpdate && <></>}
       {showSureDelete && (
         <Box>
           <Overlay mt="sm" opacity={0.6} color="gray" zIndex={5} blur={2} />
@@ -177,7 +176,7 @@ const Comment = ({
         }}
       >
         <Title order={3}>{author?.username}</Title>
-        <Text color="dimmed">{created_at}</Text>
+        <Text color="dimmed">{new Date(created_at).toLocaleDateString()}</Text>
         {showUpdate ? (
           <TextInput
             value={valueForCommentContentUpdate}
