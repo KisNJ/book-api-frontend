@@ -1,12 +1,37 @@
+
+:root {
+  --mantine-header-height: 0px;
+}
+.mantine-60ksfu,.mantine-ltcoie{
+  position: relative;
+}
 .mantine-1jeabk1:checked::before{
   transform: translateX(65px);
-}
-.mantine-4mmx9a{
-  position: relative;
 }
 .mantine-jh0x0t{
   padding-top: 5px;
 }
 .mantine-kexfv8{
   align-items: start;
+}
+.mantine-qo1k2{
+  height: auto;
+}
+#rel-top {
+  position: relative;
+  top: 10px;
+}
+#unstyled{
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 25%;
+
+}
+#unstyled:focus {
+    outline: none;
+  box-shadow:0 0 0 2px orangered;
+}
+#unstyled:hover {
+  outline: 2px solid orangered;
+  box-shadow: inset 0 0 10px orangered;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getBlogById, IComment } from "../api/booksApi";
+import { getBlogById } from "../api/booksApi";
 import {
   ActionIcon,
   Box,
@@ -14,6 +14,7 @@ import {
   TextInput,
   Textarea,
   Switch,
+  Paper,
 } from "@mantine/core";
 import { IBlog, deleteBlog, updateBlog, IUpdateBlog } from "../api/booksApi";
 import CommentSection from "./CommentSection";
@@ -182,14 +183,7 @@ const Blog = () => {
             <Text variant="gradient">{blogData.title}</Text>
           )}
         </Title>
-        <Text pl="sm" color="dimmed">
-          Author: {blogData.author?.username}
-        </Text>
-        <Text pl="sm" color="dimmed">
-          {new Date(blogData.created_at).toLocaleDateString()}
-        </Text>
-        <Box id="update-delete" style={{ position: "relative" }} p="md">
-          <LoadingOverlay visible={showUpdateOverLay} overlayBlur={2} />
+        <Box style={{ zIndex: "6", position: "relative" }}>
           {showSureDelete && (
             <>
               <Overlay
@@ -200,7 +194,7 @@ const Blog = () => {
                 blur={2}
               />
               <Box>
-                <Box style={{ zIndex: "6", position: "relative" }}>
+                <Box style={{ zIndex: "6", position: "relative", top: "30px" }}>
                   <Text
                     weight={700}
                     size="xl"
@@ -226,33 +220,49 @@ const Blog = () => {
               </Box>
             </>
           )}
-          {_id === blogData.author?._id && (
-            <Box style={{ zIndex: "6", position: "relative" }}>
-              <Group position={showUpdate ? "apart" : "right"}>
-                {showUpdate && (
-                  <Button mt="sm" onClick={updateBlogLocal}>
-                    Update
-                  </Button>
+          <Group position="apart" style={{ position: "relative" }}>
+            <LoadingOverlay visible={showUpdateOverLay} overlayBlur={2} />
+
+            <div>
+              <Text pl="sm" color="dimmed">
+                Author: {blogData.author?.username}
+              </Text>
+              <Text pl="sm" color="dimmed">
+                {new Date(blogData.created_at).toLocaleDateString()}
+              </Text>
+            </div>
+            {_id === blogData.author?._id && (
+              <Box id="update-delete" style={{ position: "relative" }} p="md">
+                {_id === blogData.author?._id && (
+                  <Box style={{ position: "relative" }}>
+                    <Group position={showUpdate ? "apart" : "right"}>
+                      {showUpdate && (
+                        <Button mt="sm" onClick={updateBlogLocal}>
+                          Update
+                        </Button>
+                      )}
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <ActionIcon
+                          color="red"
+                          variant="light"
+                          onClick={() => setShowSureDelete((old) => !old)}
+                        >
+                          <IconTrash />
+                        </ActionIcon>
+                        <ActionIcon
+                          color="blue"
+                          variant="light"
+                          onClick={() => setShowUpdate((old) => !old)}
+                        >
+                          <IconEdit />
+                        </ActionIcon>
+                      </div>
+                    </Group>
+                  </Box>
                 )}
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <ActionIcon
-                    color="red"
-                    variant="light"
-                    onClick={() => setShowSureDelete((old) => !old)}
-                  >
-                    <IconTrash />
-                  </ActionIcon>
-                  <ActionIcon
-                    color="blue"
-                    variant="light"
-                    onClick={() => setShowUpdate((old) => !old)}
-                  >
-                    <IconEdit />
-                  </ActionIcon>
-                </div>
-              </Group>
-            </Box>
-          )}
+              </Box>
+            )}
+          </Group>
         </Box>
         {showUpdate ? (
           <Textarea
@@ -264,9 +274,11 @@ const Blog = () => {
             onChange={handleChange}
           />
         ) : (
-          <Text align="justify" my="xl" size="lg">
-            {blogData.content}
-          </Text>
+          <Paper px="md" py="xs" mt="md">
+            <Text align="justify" my="xl" size="lg">
+              {blogData.content}
+            </Text>
+          </Paper>
         )}
         {showUpdate && (
           <Switch

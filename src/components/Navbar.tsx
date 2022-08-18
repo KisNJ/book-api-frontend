@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../App.css";
 import { Outlet } from "react-router-dom";
 import {
@@ -11,15 +11,23 @@ import {
   TextInput,
   Alert,
   Title,
+  MantineProvider,
+  ActionIcon,
+  ColorSchemeProvider,
+  ColorScheme,
+  useMantineColorScheme,
+  UnstyledButton,
 } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import { Link, useLocation } from "react-router-dom";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconMoonStars, IconSun, IconX } from "@tabler/icons";
 import { useUserStore } from "../stores/userStore";
 import { useGetUser } from "../api/getUser";
 import { signUp, logIn, logOut } from "../api/booksApi";
-
 const NavbarP = () => {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   const [show, setShow] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [formData, setFormData] = useState({
@@ -143,28 +151,28 @@ const NavbarP = () => {
   return (
     <>
       <Group position="apart">
-        <Title order={1}>
-          <Text
-            variant="gradient"
-            gradient={
-              username
-                ? { from: "orange", to: "red" }
-                : { from: "blue", to: "indigo" }
-            }
-          >
-            {username || "Blogs app"}
-          </Text>
-        </Title>
-        <div style={{ display: "flex", gap: "10px" }}>
-          {location.pathname === "/" ? (
-            <Button disabled component={Link} to="/">
-              Home page
-            </Button>
-          ) : (
-            <Button component={Link} to="/">
-              Home page
-            </Button>
-          )}
+        <UnstyledButton id="unstyled" component={Link} to="/">
+          <Title order={1}>
+            <Text
+              variant="gradient"
+              gradient={
+                username
+                  ? { from: "orange", to: "red" }
+                  : { from: "blue", to: "indigo" }
+              }
+            >
+              {username || "Blogs app"}
+            </Text>
+          </Title>
+        </UnstyledButton>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           {!username ? (
             <>
               <Button onClick={() => setShow((o) => !o)}>Sign Up</Button>
@@ -193,6 +201,14 @@ const NavbarP = () => {
               <Button onClick={() => handleLogout()}>Log out</Button>
             </>
           )}
+          <ActionIcon
+            variant="outline"
+            color={dark ? "yellow" : "blue"}
+            onClick={() => toggleColorScheme()}
+            title="Toggle color scheme"
+          >
+            {dark ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+          </ActionIcon>
           <Modal opened={show} onClose={() => setShow(false)} title="Sign up!">
             <form onSubmit={handleSubmit}>
               <TextInput
@@ -287,17 +303,38 @@ const NavbarP = () => {
   );
 };
 const Navbar = () => {
+  // const colorScheme = useColorStore((state) => state.theme);
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
   return (
-    <AppShell
-      header={
-        <Header p="md" height="60" fixed={false}>
-          <NavbarP />
-        </Header>
-      }
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
     >
-      {/* <div>Navbar</div> */}
-      <Outlet />
-    </AppShell>
+      <MantineProvider theme={{ colorScheme }}>
+        <NotificationsProvider>
+          <AppShell
+            header={
+              <Header p="md" height="fit-content" fixed={false}>
+                <NavbarP />
+              </Header>
+            }
+            styles={(theme) => ({
+              main: {
+                backgroundColor:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[8]
+                    : theme.colors.gray[0],
+              },
+            })}
+          >
+            {/* <div>Navbar</div> */}
+            <Outlet />
+          </AppShell>
+        </NotificationsProvider>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 };
 

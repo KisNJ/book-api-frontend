@@ -143,7 +143,7 @@ const Comment = ({
       <LoadingOverlay visible={showUpdateOverLay} overlayBlur={2} />
       {showSureDelete && (
         <Box>
-          <Overlay mt="sm" opacity={0.6} color="gray" zIndex={5} blur={2} />
+          <Overlay mt="sm" opacity={0.6} color="#e2e8f0" zIndex={5} blur={2} />
           <Box style={{ zIndex: "6", position: "relative" }}>
             <Text
               weight={700}
